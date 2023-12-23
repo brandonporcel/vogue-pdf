@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer";
-import fs from "fs";
 import path from "path";
 
 async function getTitle(page, selector) {
@@ -131,11 +130,8 @@ async function getImages(page, selector) {
         </html>
       `;
 
-    fs.writeFileSync("output.html", newHtmlContent);
-    await page.goto(`file://${__dirname}/output.html`, {
-      waitUntil: "networkidle0",
-    });
-    await page.pdf({ path: "output.pdf", format: "A4" });
+    await page.setContent(newHtmlContent, { waitUntil: "networkidle0" });
+    await page.pdf({ path: `${description}.pdf`, format: "A4" });
     await browser.close();
   } catch (error) {
     console.error("Ocurrió un error:", error);
